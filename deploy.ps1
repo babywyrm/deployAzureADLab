@@ -4,7 +4,6 @@
 # Author: @lydericlefebvre
 #
 
-
 #################
 # Prerequisites #
 #################
@@ -17,7 +16,6 @@
 
 # Install Azure Powershell
 # Install-Module -Name Az -AllowClobber -Scope CurrentUser
-
 
 ##################
 # Lab Deployment #
@@ -54,7 +52,6 @@ Install-Lab
 
 # Get a deployment summary (passwords, etc)
 Show-LabDeploymentSummary -Detailed
-
 
 ##################
 # Remove the lab
