@@ -33,7 +33,7 @@ New-LabDefinition -Name PawPatrol -DefaultVirtualizationEngine Azure
 # We add a lab Azure subscription. Can take 1 hour the first time it is launched because of lab sources sync.
 Add-LabAzureSubscription -DefaultLocationName $azureDefaultLocation
 
-# Définition des machines à déployer
+# Machines definition (name, memory, OS, etc)
 # You can get available Azure image names with the following command
 # Get-LabAvailableOperatingSystem -Azure -Location WestEurope
 Add-LabMachineDefinition -Name DC1-2019-DAT -Memory 1GB -OperatingSystem 'Windows Server 2019 Datacenter' -Roles RootDC -DomainName pawpatrol.local
