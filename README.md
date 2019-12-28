@@ -17,7 +17,7 @@
 | ------------- |:-------------|
 | [About](#about)  | Brief Description about the script |
 | [Installation](#installation)  | Installation and Requirements |
-| [Usage](#using-spraykatz)  | How to use this script |
+| [Usage](#Usage)  | How to use this script |
 | [Acknowlegments](#acknowlegments)  | Acknowlegments |
 
 ### About
