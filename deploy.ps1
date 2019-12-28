@@ -126,13 +126,6 @@ Invoke-LabCommand -ActivityName AddPawPatrol -ComputerName (Get-LabVM -Role Root
         /!\ IF YOU HAVE FREE SUBSCRIPTION, YOU CAN ONLY HAVE 4 VMs
         You must comment every runas which aim previously commented machines /!\
 #>
-FS2-2016
-SQL-2012-R2
-BAS-2012-R2
-WEB-2012-R2
-FS3-2008-R2
-
-RAD-2008-R2
 # DC1-2016's ryder runas
 Invoke-LabCommand -ActivityName DC1-2016_RYDER_EMULATION -ComputerName (Get-LabVM -ComputerName DC1-2016) -ScriptBlock {
 	$username = "pawpatrol\ryder"
