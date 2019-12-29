@@ -3,7 +3,7 @@
 # whatis: Automate the deployment on Azure of an Active Directory Lab
 #           - with heterogeneous OS
 #           - with domain users adding
-#           - with few users logon emulations
+#           - with users logon emulations
 # Thanks: Based on automatedlab https://github.com/AutomatedLab/
 #
 
@@ -76,14 +76,13 @@ Add-LabMachineDefinition -Name DC1-2016 -Memory 2GB -Roles $roles -OperatingSyst
 Add-LabMachineDefinition -Name FS1-2019 -Memory 1GB -OperatingSystem 'Windows Server 2019 Datacenter' -IpAddress 192.168.30.50
 Add-LabMachineDefinition -Name FS2-2016 -Memory 1GB -OperatingSystem 'Windows Server 2016 Datacenter' -IpAddress 192.168.30.51
 Add-LabMachineDefinition -Name SQL-2012-R2 -Memory 1GB -OperatingSystem 'Windows Server 2012 R2 Datacenter (Server with a GUI)' -IpAddress 192.168.30.52
-Add-LabMachineDefinition -Name BAS-2012-R2 -Memory 1GB -OperatingSystem 'Windows Server 2012 R2 Datacenter (Server with a GUI)' -IpAddress 192.168.30.53
-Add-LabMachineDefinition -Name WEB-2012-R2 -Memory 1GB -OperatingSystem 'Windows Server 2012 R2 Datacenter (Server with a GUI)' -IpAddress 192.168.30.54
-#Add-LabMachineDefinition -Name SQL-2012 -Memory 1GB -OperatingSystem 'Windows Server 2012 Datacenter (Server with a GUI)' -IpAddress 192.168.30.55
-#Add-LabMachineDefinition -Name BAS-2012 -Memory 1GB -OperatingSystem 'Windows Server 2012 Datacenter (Server with a GUI)' -IpAddress 192.168.30.56
-Add-LabMachineDefinition -Name FS3-2008-R2 -Memory 1GB -OperatingSystem 'Windows Server 2008 R2 Datacenter (Full Installation)' -IpAddress 192.168.30.57
-Add-LabMachineDefinition -Name RAD-2008-R2 -Memory 1GB -OperatingSystem 'Windows Server 2008 R2 Datacenter (Full Installation)' -IpAddress 192.168.30.58
-#Add-LabMachineDefinition -Name PC-10-PRO -Memory 1GB -OperatingSystem 'Windows 10 Pro' -IpAddress 192.168.30.59
-#Add-LabMachineDefinition -Name PC-10-PRO-2 -Memory 1GB -OperatingSystem 'Windows 10 Pro' -IpAddress 192.168.30.60
+Add-LabMachineDefinition -Name WEB-2012-R2 -Memory 1GB -OperatingSystem 'Windows Server 2012 R2 Datacenter (Server with a GUI)' -IpAddress 192.168.30.53
+Add-LabMachineDefinition -Name BAS-2012-R2 -Memory 1GB -OperatingSystem 'Windows Server 2012 R2 Datacenter (Server with a GUI)' -IpAddress 192.168.30.54
+Add-LabMachineDefinition -Name RAD-2008-R2 -Memory 1GB -OperatingSystem 'Windows Server 2008 R2 Datacenter (Full Installation)' -IpAddress 192.168.30.55
+Add-LabMachineDefinition -Name FS3-2008-R2 -Memory 1GB -OperatingSystem 'Windows Server 2008 R2 Datacenter (Full Installation)' -IpAddress 192.168.30.56
+
+#Add-LabMachineDefinition -Name SQL-2012 -Memory 1GB -OperatingSystem 'Windows Server 2012 Datacenter (Server with a GUI)' -IpAddress 192.168.30.57
+#Add-LabMachineDefinition -Name PC-10-PRO -Memory 1GB -OperatingSystem 'Windows 10 Pro' -IpAddress 192.168.30.58
 
 # Launch lab installation
 Install-Lab
@@ -126,6 +125,7 @@ Invoke-LabCommand -ActivityName AddPawPatrol -ComputerName (Get-LabVM -Role Root
         /!\ IF YOU HAVE FREE SUBSCRIPTION, YOU CAN ONLY HAVE 4 VMs
         You must comment every runas which aim previously commented machines /!\
 #>
+
 # DC1-2016's ryder runas
 Invoke-LabCommand -ActivityName DC1-2016_RYDER_EMULATION -ComputerName (Get-LabVM -ComputerName DC1-2016) -ScriptBlock {
 	$username = "pawpatrol\ryder"
@@ -171,6 +171,15 @@ Invoke-LabCommand -ActivityName BAS-2012-R2_ROCKY_EMULATION -ComputerName (Get-L
     Start-Process Notepad.exe -Credential $credential
 }
 
+# WEB-2012-R2's everest runas 
+Invoke-LabCommand -ActivityName WEB-2012-R2_EVEREST_EMULATION -ComputerName (Get-LabVM -ComputerName WEB-2012-R2) -ScriptBlock {
+	$username = "pawpatrol\everest"
+    $password = "Ice or snow, I'm re@dy to go9!"
+    $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+    $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
+    Start-Process Notepad.exe -Credential $credential
+}
+
 # RAD-2008-R2's everest runas
 Invoke-LabCommand -ActivityName RAD-2008-R2_EVEREST_EMULATION -ComputerName (Get-LabVM -ComputerName RAD-2008-R2) -ScriptBlock {
 	$username = "pawpatrol\everest"
@@ -189,15 +198,6 @@ Invoke-LabCommand -ActivityName RAD-2008-R2_ROCKY_EMULATION -ComputerName (Get-L
     Start-Process Notepad.exe -Credential $credential
 }
 
-# WEB-2012-R2's everest runas 
-Invoke-LabCommand -ActivityName WEB-2012-R2_EVEREST_EMULATION -ComputerName (Get-LabVM -ComputerName WEB-2012-R2) -ScriptBlock {
-	$username = "pawpatrol\everest"
-    $password = "Ice or snow, I'm re@dy to go9!"
-    $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
-    $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
-    Start-Process Notepad.exe -Credential $credential
-}
-
 # FS3-2008-R2's rubble runas
 Invoke-LabCommand -ActivityName FS3-2008-R2_RUBBLE_EMULATION -ComputerName (Get-LabVM -ComputerName FS3-2008-R2) -ScriptBlock {
 	$username = "pawpatrol\rubble"
@@ -206,15 +206,17 @@ Invoke-LabCommand -ActivityName FS3-2008-R2_RUBBLE_EMULATION -ComputerName (Get-
     $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
     Start-Process Notepad.exe -Credential $credential
 }
-
-# RAD-2008-R2's zuma runas
-Invoke-LabCommand -ActivityName RAD-2008-R2_ZUMA_EMULATION -ComputerName (Get-LabVM -ComputerName RAD-2008-R2) -ScriptBlock {
+#>
+<#
+# SQL-2012's zuma runas
+Invoke-LabCommand -ActivityName SQL-2012_ZUMA_EMULATION -ComputerName (Get-LabVM -ComputerName SQL-2012) -ScriptBlock {
 	$username = "pawpatrol\zuma"
     $password = "Let's dive in!@8"
     $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
     $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
     Start-Process Notepad.exe -Credential $credential
 }
+#>
 
 
 # Get a deployment summary (passwords, etc)
